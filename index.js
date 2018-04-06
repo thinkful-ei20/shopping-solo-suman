@@ -7,6 +7,7 @@ const STORE = {
   {name: "milk", checked: true},
   {name: "bread", checked: false}
 ],
+checkBox : '.js-display-checked-items',
 };
 
 
@@ -39,7 +40,6 @@ function renderShoppingList() {
   // render the shopping list in the DOM
   console.log('`renderShoppingList` ran');
   const shoppingListItemsString = generateShoppingItemsString(STORE.items);
-
   // insert that HTML into the DOM
   $('.js-shopping-list').html(shoppingListItemsString);
 }
@@ -99,6 +99,45 @@ function handleDeleteItemClicked() {
    renderShoppingList();
   });  
 }
+/*
+User can press a switch/checkbox to toggle between displaying all 
+items or displaying only items that are unchecked
+1. Have a check box in main page
+2. When checked - display checked items
+3. When unchecked - don't 
+4. Create a function that would read the event call it function checkedItemsDisplay()
+*/
+function checkedItemDisplay(){  
+  //console.log('.js-display-checked-items');
+  $('.js-display-checked-items').on('change', function(event){
+    if($(this).is(':checked')){
+      console.log("Got here -- box is checked");
+      hideOrShowCheckedItems('checked')
+    }
+   else {
+      console.log("Got here -- box is unchecked");
+      hideOrShowCheckedItems('unchecked')
+  }
+ })
+}
+function hideOrShowCheckedItems(state){
+  if(state === 'checked'){
+    renderShoppingList();
+  }
+  else{    
+    let filteredItems = [];
+    let str = STORE.items.forEach(item => {
+      //console.log(item.checked);
+      if(!item.checked){
+        filteredItems.push(item);        
+      }   
+    });
+    console.log(filteredItems);  
+    const shoppingListItemsString = generateShoppingItemsString(filteredItems);
+    $('.js-shopping-list').html(shoppingListItemsString);
+      
+  }
+}
 
 // this function will be our callback when the page loads. it's responsible for
 // initially rendering the shopping list, and activating our individual functions
@@ -109,6 +148,7 @@ function handleShoppingList() {
   handleNewItemSubmit();
   handleItemCheckClicked();
   handleDeleteItemClicked();
+  checkedItemDisplay();
 }
 
 // when the page loads, call `handleShoppingList`
