@@ -1,11 +1,13 @@
 'use strict';
 
-const STORE = [
+const STORE = {
+  items :[
   {name: "apples", checked: false},
   {name: "oranges", checked: false},
   {name: "milk", checked: true},
   {name: "bread", checked: false}
-];
+],
+};
 
 
 function generateItemElement(item, itemIndex, template) {
@@ -36,7 +38,7 @@ function generateShoppingItemsString(shoppingList) {
 function renderShoppingList() {
   // render the shopping list in the DOM
   console.log('`renderShoppingList` ran');
-  const shoppingListItemsString = generateShoppingItemsString(STORE);
+  const shoppingListItemsString = generateShoppingItemsString(STORE.items);
 
   // insert that HTML into the DOM
   $('.js-shopping-list').html(shoppingListItemsString);
@@ -45,7 +47,7 @@ function renderShoppingList() {
 
 function addItemToShoppingList(itemName) {
   console.log(`Adding "${itemName}" to shopping list`);
-  STORE.push({name: itemName, checked: false});
+  STORE.items.push({name: itemName, checked: false});
 }
 
 function handleNewItemSubmit() {
@@ -61,7 +63,7 @@ function handleNewItemSubmit() {
 
 function toggleCheckedForListItem(itemIndex) {
   console.log("Toggling checked property for item at index " + itemIndex);
-  STORE[itemIndex].checked = !STORE[itemIndex].checked;
+  STORE.items[itemIndex].checked = !STORE.items[itemIndex].checked;
 }
 
 
@@ -83,7 +85,7 @@ function handleItemCheckClicked() {
 
 function removeItemFromShoppingList(itemIndex){
     console.log(`removeItemFromShoppingList ran`);
-    STORE.splice(itemIndex,1);
+    STORE.items.splice(itemIndex,1);
 }
 
 
@@ -111,3 +113,37 @@ function handleShoppingList() {
 
 // when the page loads, call `handleShoppingList`
 $(handleShoppingList);
+/*
+const STORE = {
+  items: [...],
+  sortBy: 'alpha'
+};
+
+function renderShoppingList() {
+  let filteredItems = [ ...STORE.items ];
+
+  if (STORE.sortBy === 'alpha') {
+    filteredItems.sort((a, b) => a.name > b.name);
+  } else if (STORE.sortBy === 'time') {
+    filteredItems.sort((a, b) => a.createdAt > b.createdAt);
+  }
+  
+  [ ..rest of render ]
+}
+
+function setSortBy(sortBy) {
+  STORE.sortBy = sortBy;
+}
+
+function handleChangeSortBy() {
+  $('#sort-options').on('change', event => {
+
+    // 1. get info from user action (optional)
+    const selectedOption = $(event.target).find('option:selected').val();
+    // 2. update store
+    setSortBy(selectedOption);
+    // 3. render
+    renderShoppingList();
+  });
+}
+*/
