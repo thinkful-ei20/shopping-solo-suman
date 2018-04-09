@@ -15,10 +15,15 @@
             <label for="shopping-list-entry">Add an item</label>            
             <input type="text" name="shopping-list-entry" class="js-shopping-list-entry" placeholder="e.g., broccoli">            
             <button type="submit">Add item</button>
-            <input type="checkbox" name="display-checked-items" id="display-checked-items" class="js-display-checked-items" checked>Display Checked Items</input>
+            <label>
+            <input type="checkbox" id="display-checked-items" class="js-display-checked-items">Display Checked Items
+            </label>
         </form>
         <ul class="shopping-list js-shopping-list">
         </ul>
+        <label for="shopping-list-search">Search an item</label>            
+        <input type="text" name="shopping-list-search" class="js-shopping-list-search" placeholder="e.g., broccoli">            
+        <button type="submit" class="js-search-btn">Search Item</button>
     </div>
     <script src="//code.jquery.com/jquery.min.js"></script>
     <script type="text/javascript" src="index.js"></script>

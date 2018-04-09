@@ -1,5 +1,4 @@
-'use strict';
-
+'use strict'; 
 const STORE = {
   items :[
   {name: "apples", checked: false},
@@ -7,6 +6,7 @@ const STORE = {
   {name: "milk", checked: true},
   {name: "bread", checked: false}
 ],
+displayUnchecked : false,
 checkBox : '.js-display-checked-items',
 };
 
@@ -39,7 +39,14 @@ function generateShoppingItemsString(shoppingList) {
 function renderShoppingList() {
   // render the shopping list in the DOM
   console.log('`renderShoppingList` ran');
-  const shoppingListItemsString = generateShoppingItemsString(STORE.items);
+  let filterItems = [...STORE.items];
+  if(STORE.displayUnchecked == true){
+    //console.log("Display check true");
+    filterItems = filterItems.filter(item => item.checked == false);
+    console.log(filterItems);
+  }
+  
+  const shoppingListItemsString = generateShoppingItemsString(filterItems);
   // insert that HTML into the DOM
   $('.js-shopping-list').html(shoppingListItemsString);
 }
@@ -109,34 +116,28 @@ items or displaying only items that are unchecked
 */
 function checkedItemDisplay(){  
   //console.log('.js-display-checked-items');
+  //STORE.displayUnchecked = STORE.displayUnchecked == false ? true : false; 
   $('.js-display-checked-items').on('change', function(event){
-    if($(this).is(':checked')){
-      console.log("Got here -- box is checked");
-      hideOrShowCheckedItems('checked')
-    }
-   else {
-      console.log("Got here -- box is unchecked");
-      hideOrShowCheckedItems('unchecked')
-  }
+    STORE.displayUnchecked = STORE.displayUnchecked == false ? true : false;
+    renderShoppingList();
  })
 }
-function hideOrShowCheckedItems(state){
-  if(state === 'checked'){
-    renderShoppingList();
-  }
-  else{    
-    let filteredItems = [];
-    let str = STORE.items.forEach(item => {
-      //console.log(item.checked);
-      if(!item.checked){
-        filteredItems.push(item);        
-      }   
+
+function searchItem(){
+  console.log("search item funtion");
+  console.log($('.js-search-btn'));
+  $('.js-search-btn').on('click', event => {
+    //console.log("got here");
+    let item = $('.js-shopping-list-search').val();
+    console.log("item value " + item);
+    let filteredItemList = STORE.items.filter(itemInStoredList => {
+      if(itemInStoredList.name === item)
+        return itemInStoredList;
     });
-    console.log(filteredItems);  
-    const shoppingListItemsString = generateShoppingItemsString(filteredItems);
-    $('.js-shopping-list').html(shoppingListItemsString);
-      
-  }
+    const shoppingListItemsString = generateShoppingItemsString(filteredItemList);
+  // insert that HTML into the DOM
+  $('.js-shopping-list').html(shoppingListItemsString);
+  })
 }
 
 // this function will be our callback when the page loads. it's responsible for
@@ -149,41 +150,10 @@ function handleShoppingList() {
   handleItemCheckClicked();
   handleDeleteItemClicked();
   checkedItemDisplay();
+  searchItem();
 }
 
 // when the page loads, call `handleShoppingList`
 $(handleShoppingList);
-/*
-const STORE = {
-  items: [...],
-  sortBy: 'alpha'
-};
-
-function renderShoppingList() {
-  let filteredItems = [ ...STORE.items ];
-
-  if (STORE.sortBy === 'alpha') {
-    filteredItems.sort((a, b) => a.name > b.name);
-  } else if (STORE.sortBy === 'time') {
-    filteredItems.sort((a, b) => a.createdAt > b.createdAt);
-  }
-  
-  [ ..rest of render ]
-}
-
-function setSortBy(sortBy) {
-  STORE.sortBy = sortBy;
-}
-
-function handleChangeSortBy() {
-  $('#sort-options').on('change', event => {
-
-    // 1. get info from user action (optional)
-    const selectedOption = $(event.target).find('option:selected').val();
-    // 2. update store
-    setSortBy(selectedOption);
-    // 3. render
-    renderShoppingList();
-  });
-}
-*/
+ //Search
+ //Call search func 
